@@ -5,8 +5,8 @@ const StyledHandle = styled.div`
   width: 8px;
   height: 8px;
   position: absolute;
-  bottom: 8px;
-  right: 8px;
+  bottom: 0px;
+  right: 0px;
   cursor: crosshair;
 
   &::before {

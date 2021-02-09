@@ -11,7 +11,24 @@ const StyledCard = styled.div`
   width: fit-content;
 `;
 
-const CardHeader = styled.div``;
+const CardHeader = styled.div`
+  padding: 8px 16px;
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+
+  /* &::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background: #e5e6eb;
+  } */
+`;
 const CardBody = styled.div`
   background: white;
   padding: 16px;

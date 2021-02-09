@@ -4,11 +4,16 @@ import "./styles.css";
 import { data } from "./data";
 import Card from "./components/Card";
 import AutoNivoBarChart from "./components/AutoNivoBarChart";
+import GlobalStyle from "./globalStyles";
 
 export default function App() {
   return (
     <div style={{ height: "100vh" }}>
-      <AutoBarChart data={data} />
+      <GlobalStyle />
+      <Card title={"Sales"}>
+        <AutoBarChart data={data} />
+      </Card>
+
       <AutoNivoBarChart />
     </div>
   );

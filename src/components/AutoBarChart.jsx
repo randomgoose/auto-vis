@@ -11,7 +11,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import Handle from "./Handle";
-import PropTypes from "prop-types";
+import Statistic from "./Statistic";
 
 export default function AutoBarChart(props) {
   const ref = React.useRef();
@@ -42,13 +42,13 @@ export default function AutoBarChart(props) {
 
   function renderLegend() {
     return height > 120 ? (
-      <Legend layout="horizontal" />
+      <Legend layout="horizontal" wrapperStyle={{ marginTop: 24 }} />
     ) : height < 80 ? null : (
       <Legend
         layout="vertical"
         align="right"
         verticalAlign="middle"
-        wrapperStyle={{ fontSize: 16 }}
+        wrapperStyle={{ fontSize: 14, paddingLeft: 32 }}
       />
     );
   }
@@ -76,6 +76,41 @@ export default function AutoBarChart(props) {
 
   function useUnitAbbr() {}
 
+  function renderStatistic() {
+    return <Statistic title={"Best seller"} data={props.data[0].burger} />;
+  }
+
+  const chart = (
+    <ResponsiveContainer ref={containerRef}>
+      <BarChart ref={chartRef} data={props.data}>
+        <XAxis dataKey="country" hide={shouldHideAxis()} />
+        <YAxis hide={shouldHideAxis()} width={40} />
+        {renderCartesianGrid()}
+        {renderLegend()}
+        <Tooltip />
+        <Bar
+          ref={bar}
+          dataKey={"burger"}
+          fill={palette[0]}
+          stackId={shouldStack()}
+        ></Bar>
+        <Bar dataKey={"kebab"} fill={palette[1]} stackId={shouldStack()}></Bar>
+        <Bar dataKey={"fries"} fill={palette[2]} stackId={shouldStack()}></Bar>
+        <Bar dataKey={"donut"} fill={palette[3]} stackId={shouldStack()}></Bar>
+        <Bar
+          dataKey={"hot dog"}
+          fill={palette[4]}
+          stackId={shouldStack()}
+        ></Bar>
+        <Bar
+          dataKey={"sandwich"}
+          fill={palette[5]}
+          stackId={shouldStack()}
+        ></Bar>
+      </BarChart>
+    </ResponsiveContainer>
+  );
+
   return (
     <ResizableBox
       handle={
@@ -84,9 +119,6 @@ export default function AutoBarChart(props) {
         </div>
       }
       style={{
-        background: "white",
-        border: "1px solid #e5e6eb",
-        padding: 16,
         borderRadius: 4,
         position: "relative",
         display: "flex",
@@ -96,68 +128,24 @@ export default function AutoBarChart(props) {
       height={200}
       ref={ref}
       onResize={(e, data) => {
-        // console.log(chartRef.current.props);
-        const {
-          width,
-          height,
-          barGap,
-          barCategoryGap
-        } = chartRef.current.props;
-        setHeight(height);
-        setWidth(width);
-        setAspectRatio(width / height);
+        console.log(chartRef.current);
+        if (chartRef.current) {
+          const {
+            width,
+            height,
+            barGap,
+            barCategoryGap
+          } = chartRef.current.props;
+          setHeight(height);
+          setWidth(width);
+          setAspectRatio(width / height);
+        } else {
+          setWidth(data.size.width);
+          setHeight(data.size.height);
+        }
       }}
     >
-      <ResponsiveContainer ref={containerRef}>
-        <BarChart ref={chartRef} data={props.data}>
-          <XAxis
-            dataKey="country"
-            hide={shouldHideAxis()}
-            label={{ value: "Country", position: "insideRight" }}
-          />
-          <YAxis
-            hide={shouldHideAxis()}
-            width={40}
-            label={{ value: "Food", angle: -90, position: "insideLeft" }}
-          />
-          {renderCartesianGrid()}
-          {renderLegend()}
-          <Tooltip />
-          <Bar
-            ref={bar}
-            dataKey={"burger"}
-            fill={palette[0]}
-            stackId={shouldStack()}
-          ></Bar>
-          <Bar
-            dataKey={"kebab"}
-            fill={palette[1]}
-            stackId={shouldStack()}
-          ></Bar>
-          <Bar
-            dataKey={"fries"}
-            fill={palette[2]}
-            stackId={shouldStack()}
-          ></Bar>
-          <Bar
-            dataKey={"donut"}
-            fill={palette[3]}
-            stackId={shouldStack()}
-          ></Bar>
-          <Bar
-            dataKey={"hot dog"}
-            fill={palette[4]}
-            stackId={shouldStack()}
-          ></Bar>
-          <Bar
-            dataKey={"sandwich"}
-            fill={palette[5]}
-            stackId={shouldStack()}
-          ></Bar>
-        </BarChart>
-      </ResponsiveContainer>
+      {width > 120 ? chart : height > 80 ? chart : renderStatistic()}
     </ResizableBox>
   );
 }
-
-AutoBarChart.PropTypes = {};
