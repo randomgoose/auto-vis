@@ -1,15 +1,17 @@
 {
-  "name": "dashboard",
+  "name": "auto-vis",
   "version": "1.0.0",
   "description": "",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
+    "@material-ui/core": "4.11.3",
     "@nivo/bar": "0.67.0",
     "@nivo/core": "0.67.0",
     "prop-types": "15.7.2",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-draggable": "4.4.3",
     "react-grid-layout": "1.2.0",
     "react-icons": "4.2.0",
     "react-resizable": "1.11.0",

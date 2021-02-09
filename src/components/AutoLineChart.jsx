@@ -1,20 +1,21 @@
 import * as React from "react";
 import { ResizableBox } from "react-resizable";
 import {
-  BarChart,
-  Bar,
+  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
+  LineChart
 } from "recharts";
 import Handle from "./Handle";
+import ResizableContainer from "./ResizableContainer";
+import useGeneralRules from "../hooks/useGeneralRules";
 
-export default function AutoBarChart(props) {
+export default function AutoLineChart(props) {
   const ref = React.useRef();
-  const bar = React.useRef(null);
   const chartRef = React.useRef();
   const XAxisRef = React.useRef();
   const legendRef = React.useRef();
@@ -29,10 +30,6 @@ export default function AutoBarChart(props) {
     } else return null;
   }
 
-  function renderLegend() {
-    return height > 120 ? <Legend layout="vertical" /> : null;
-  }
-
   function shouldHideAxis() {
     if (width > 160 && height > 120) {
       return false;
@@ -42,47 +39,26 @@ export default function AutoBarChart(props) {
   }
 
   return (
-    <ResizableBox
-      handle={() => <Handle />}
-      style={{
-        background: "white",
-        boxShadow: "0 0 10px 10px rgba(0, 0, 0, .1)",
-        padding: 16,
-        borderRadius: 4,
-        position: "relative"
-      }}
-      width={200}
-      height={200}
+    <ResizableContainer
       ref={ref}
       onResize={(e, data) => {
         setWidth(chartRef.current.props.width);
         setHeight(chartRef.current.props.height);
-        setBarWidth(bar.current.props.data[0].width);
-        // console.log(chartRef.current.props.children[6]);
         const { width, height } = chartRef.current.props;
         setAspectRatio(width / height);
       }}
     >
-      <ResponsiveContainer style={{ height: "100%" }}>
-        <BarChart ref={chartRef} data={props.data}>
-          {renderCartesianGrid()}
-          <XAxis dataKey="name" hide={shouldHideAxis()} />
-          <YAxis stroke="#8884d8" hide={shouldHideAxis()} />
-          <Bar
-            ref={bar}
-            dataKey="pv"
-            fill="#8884d8"
-            stackId={width > 240 ? null : "a"}
-          />
-          <Bar dataKey="uv" fill="#82ca9d" stackId="a" />
+      <ResponsiveContainer>
+        <LineChart ref={chartRef} data={props.data}>
+          {useGeneralRules(width, height)}
+          <XAxis dataKey="country" hide={shouldHideAxis()} />
+          <YAxis stroke="#8884d8" width={40} hide={shouldHideAxis()} />
+          <Line dataKey="burger" stroke="#8884d8" type="monotone" />
+          <Line dataKey="fries" stroke="#82ca9d" type="monotone" />
           <Tooltip />
-          {renderLegend()}
-        </BarChart>
+          <Legend />
+        </LineChart>
       </ResponsiveContainer>
-      <h1>Amount</h1>
-      <div>{`Bar width: ${barWidth}`}</div>
-      <div>{`Width: ${width}`}</div>
-      <div>{`Height: ${height}`}</div>
-    </ResizableBox>
+    </ResizableContainer>
   );
 }

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { ResizableBox } from "react-resizable";
 import {
   BarChart,
   Bar,
@@ -10,7 +9,8 @@ import {
   Legend,
   ResponsiveContainer
 } from "recharts";
-import Handle from "./Handle";
+import useGeneralRules from "../hooks/useGeneralRules";
+import ResizableContainer from "./ResizableContainer";
 import Statistic from "./Statistic";
 
 export default function AutoBarChart(props) {
@@ -20,6 +20,7 @@ export default function AutoBarChart(props) {
   const chartRef = React.useRef();
   const [width, setWidth] = React.useState(200);
   const [height, setHeight] = React.useState(200);
+  const [renderedTicksNumber, setRenderedTicksNumber] = React.useState(0);
   const [aspectRatio, setAspectRatio] = React.useState(0);
   const [barWidth, setBarWidth] = React.useState(0);
 
@@ -39,6 +40,8 @@ export default function AutoBarChart(props) {
       return <CartesianGrid strokeDasharray="3 3" />;
     } else return null;
   }
+
+  function renderVerticalChart() {}
 
   function renderLegend() {
     return height > 120 ? (
@@ -85,7 +88,7 @@ export default function AutoBarChart(props) {
       <BarChart ref={chartRef} data={props.data}>
         <XAxis dataKey="country" hide={shouldHideAxis()} />
         <YAxis hide={shouldHideAxis()} width={40} />
-        {renderCartesianGrid()}
+        {useGeneralRules(width, height)}
         {renderLegend()}
         <Tooltip />
         <Bar
@@ -112,30 +115,26 @@ export default function AutoBarChart(props) {
   );
 
   return (
-    <ResizableBox
-      handle={
-        <div>
-          <Handle />
-        </div>
-      }
-      style={{
-        borderRadius: 4,
-        position: "relative",
-        display: "flex",
-        flexDirection: "column"
-      }}
-      width={200}
-      height={200}
+    <ResizableContainer
       ref={ref}
       onResize={(e, data) => {
-        console.log(chartRef.current);
         if (chartRef.current) {
-          const {
-            width,
-            height,
-            barGap,
-            barCategoryGap
-          } = chartRef.current.props;
+          setRenderedTicksNumber(
+            chartRef.current.container.querySelectorAll(
+              ".recharts-cartesian-axis-tick"
+            ).length
+          );
+        } else {
+          setRenderedTicksNumber(0);
+        }
+        // console.log(
+        //   chartRef.current.container.querySelectorAll(
+        //     ".recharts-cartesian-axis-tick"
+        //   )
+        // );
+
+        if (chartRef.current) {
+          const { width, height } = chartRef.current.props;
           setHeight(height);
           setWidth(width);
           setAspectRatio(width / height);
@@ -146,6 +145,6 @@ export default function AutoBarChart(props) {
       }}
     >
       {width > 120 ? chart : height > 80 ? chart : renderStatistic()}
-    </ResizableBox>
+    </ResizableContainer>
   );
 }

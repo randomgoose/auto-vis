@@ -1,6 +1,6 @@
 export const data = [
   {
-    country: "AD",
+    country: "United States",
     "hot dog": 15,
     "hot dogColor": "hsl(13, 70%, 50%)",
     burger: 39,
@@ -15,7 +15,7 @@ export const data = [
     donutColor: "hsl(231, 70%, 50%)"
   },
   {
-    country: "AE",
+    country: "United Kingdom",
     "hot dog": 140,
     "hot dogColor": "hsl(268, 70%, 50%)",
     burger: 18,
@@ -30,7 +30,7 @@ export const data = [
     donutColor: "hsl(51, 70%, 50%)"
   },
   {
-    country: "AF",
+    country: "China",
     "hot dog": 125,
     "hot dogColor": "hsl(224, 70%, 50%)",
     burger: 152,
@@ -45,7 +45,7 @@ export const data = [
     donutColor: "hsl(27, 70%, 50%)"
   },
   {
-    country: "AG",
+    country: "India",
     "hot dog": 179,
     "hot dogColor": "hsl(270, 70%, 50%)",
     burger: 36,
@@ -60,7 +60,7 @@ export const data = [
     donutColor: "hsl(211, 70%, 50%)"
   },
   {
-    country: "AI",
+    country: "France",
     "hot dog": 193,
     "hot dogColor": "hsl(276, 70%, 50%)",
     burger: 86,
@@ -75,7 +75,7 @@ export const data = [
     donutColor: "hsl(339, 70%, 50%)"
   },
   {
-    country: "AL",
+    country: "Japan",
     "hot dog": 116,
     "hot dogColor": "hsl(230, 70%, 50%)",
     burger: 102,
@@ -90,7 +90,7 @@ export const data = [
     donutColor: "hsl(257, 70%, 50%)"
   },
   {
-    country: "AM",
+    country: "Korea",
     "hot dog": 17,
     "hot dogColor": "hsl(328, 70%, 50%)",
     burger: 67,

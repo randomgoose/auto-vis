@@ -4,6 +4,7 @@ import styled from "styled-components";
 interface Props {
   title?: React.ReactNode;
   children?: React.ReactNode;
+  subTitle?: React.ReactNode;
 }
 
 const StyledCard = styled.div`
@@ -12,23 +13,16 @@ const StyledCard = styled.div`
 `;
 
 const CardHeader = styled.div`
-  padding: 8px 16px;
+  padding: 16px 16px 0 16px;
   position: relative;
-  text-align: center;
-  font-size: 20px;
-  font-weight: 600;
-
-  /* &::after {
-    content: "";
-    display: inline-block;
-    position: absolute;
-    width: 100%;
-    height: 1px;
-    bottom: 0;
-    left: 0;
-    background: #e5e6eb;
-  } */
+  font-size: 16px;
 `;
+
+const Title = styled.div``;
+const SubTitle = styled.div`
+  color: lightgray;
+`;
+
 const CardBody = styled.div`
   background: white;
   padding: 16px;
@@ -39,10 +33,13 @@ const CardBody = styled.div`
 `;
 const CardFooter = styled.div``;
 
-const Card = ({ title, children }: Props) => {
+const Card = ({ title, children, subTitle }: Props) => {
   return (
     <StyledCard>
-      <CardHeader>{title}</CardHeader>
+      <CardHeader>
+        <Title>{title}</Title>
+        <SubTitle>{subTitle}</SubTitle>
+      </CardHeader>
       <CardBody>{children}</CardBody>
       <CardFooter></CardFooter>
     </StyledCard>
