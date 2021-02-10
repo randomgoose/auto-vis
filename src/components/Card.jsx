@@ -43,7 +43,7 @@ const CardFooter = styled.div``;
 const Card = ({ title, children }) => {
   return (
     <StyledCard>
-      {/* <CardHeader>{title}</CardHeader> */}
+      <CardHeader>{title}</CardHeader>
       <CardBody>{children}</CardBody>
       <CardFooter></CardFooter>
     </StyledCard>

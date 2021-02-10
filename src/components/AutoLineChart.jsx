@@ -59,7 +59,7 @@ export default function AutoLineChart(props) {
   }
 
   const dataKeys = ['burger', 'kebab']
-  const lines = dataKeys.map((i, k) => <Line dataKey={i} key={k} stroke={palette[k + 3]} type="monotone"></ Line>)
+  const lines = dataKeys.map((i, k) => <Line dataKey={i} key={k} stroke={palette[k + 3]} type="monotone" aria-label></ Line>)
 
   return (
     <ResizableContainer
