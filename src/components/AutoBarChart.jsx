@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   BarChart,
   Bar,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -10,6 +11,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import useGeneralRules from "../hooks/useGeneralRules";
+import usePalette from "../hooks/usePalette";
 import ResizableContainer from "./ResizableContainer";
 import Statistic from "./Statistic";
 
@@ -21,19 +23,10 @@ export default function AutoBarChart(props) {
   const [width, setWidth] = React.useState(200);
   const [height, setHeight] = React.useState(200);
   const [renderedTicksNumber, setRenderedTicksNumber] = React.useState(0);
-  const [aspectRatio, setAspectRatio] = React.useState(0);
+  const [aspectRatio, setAspectRatio] = React.useState(1);
   const [barWidth, setBarWidth] = React.useState(0);
 
-  const palette = [
-    "#bcc4eb",
-    "#53828f",
-    "#373f7d",
-    "#555582",
-    "#eeebf7",
-    "#616466",
-    "#607ffc",
-    "#81aaf7"
-  ];
+  const palette = usePalette();
 
   function renderCartesianGrid() {
     if (width > 160 && height > 120) {
@@ -41,7 +34,13 @@ export default function AutoBarChart(props) {
     } else return null;
   }
 
-  function renderVerticalChart() {}
+  function shouldRenderVerticalChart() {
+    return aspectRatio < .25 ? true : false
+  }
+
+  function shouldRenderLabel() {
+
+  }
 
   function renderLegend() {
     return height > 120 ? (
@@ -75,41 +74,34 @@ export default function AutoBarChart(props) {
     return 16;
   }
 
-  function setColor() {}
+  function setColor() { }
 
-  function useUnitAbbr() {}
+  function useUnitAbbr() { }
 
   function renderStatistic() {
     return <Statistic title={"Best seller"} data={props.data[0].burger} />;
   }
 
+  const dataKeys = ['burger', 'kebab', 'fries', 'donut', 'hot dog', 'sandwich']
+
+  const bars = dataKeys.map((i, k) => <Bar dataKey={i} key={k} fill={palette[k]} stackId={shouldStack()} label={{ fill: 'white', fontSize: 12 }}>
+  </ Bar>)
+
   const chart = (
     <ResponsiveContainer ref={containerRef}>
-      <BarChart ref={chartRef} data={props.data}>
-        <XAxis dataKey="country" hide={shouldHideAxis()} />
-        <YAxis hide={shouldHideAxis()} width={40} />
+      <BarChart
+        ref={chartRef}
+        data={props.data}
+        layout={shouldRenderVerticalChart() ? 'vertical' : 'horizontal'}>
+        <XAxis dataKey={shouldRenderVerticalChart() ? null : 'country'} hide={shouldHideAxis()} type={shouldRenderVerticalChart() ? 'number' : 'category'} />
+        <YAxis dateKey={shouldRenderVerticalChart() ? 'country' : null}
+          hide={shouldHideAxis()}
+          width={40}
+          type={shouldRenderVerticalChart() ? 'category' : 'number'} />
         {useGeneralRules(width, height)}
         {renderLegend()}
         <Tooltip />
-        <Bar
-          ref={bar}
-          dataKey={"burger"}
-          fill={palette[0]}
-          stackId={shouldStack()}
-        ></Bar>
-        <Bar dataKey={"kebab"} fill={palette[1]} stackId={shouldStack()}></Bar>
-        <Bar dataKey={"fries"} fill={palette[2]} stackId={shouldStack()}></Bar>
-        <Bar dataKey={"donut"} fill={palette[3]} stackId={shouldStack()}></Bar>
-        <Bar
-          dataKey={"hot dog"}
-          fill={palette[4]}
-          stackId={shouldStack()}
-        ></Bar>
-        <Bar
-          dataKey={"sandwich"}
-          fill={palette[5]}
-          stackId={shouldStack()}
-        ></Bar>
+        {bars}
       </BarChart>
     </ResponsiveContainer>
   );
@@ -127,11 +119,9 @@ export default function AutoBarChart(props) {
         } else {
           setRenderedTicksNumber(0);
         }
-        // console.log(
-        //   chartRef.current.container.querySelectorAll(
-        //     ".recharts-cartesian-axis-tick"
-        //   )
-        // );
+        console.log(
+          shouldRenderVerticalChart()
+        );
 
         if (chartRef.current) {
           const { width, height } = chartRef.current.props;

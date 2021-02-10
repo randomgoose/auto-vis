@@ -1,12 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
 
-interface Props {
-  title?: React.ReactNode;
-  children?: React.ReactNode;
-  subTitle?: React.ReactNode;
-}
-
 const StyledCard = styled.div`
   border: 1px solid #e5e6eb;
   width: fit-content;
@@ -16,12 +10,25 @@ const CardHeader = styled.div`
   padding: 16px 16px 0 16px;
   position: relative;
   font-size: 16px;
+  font-weight: 600;
+
+  /* &::after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    background: #e5e6eb;
+  } */
 `;
 
-const Title = styled.div``;
+const Title = styled.div``
+
 const SubTitle = styled.div`
-  color: lightgray;
-`;
+  font-size: 12px;
+`
 
 const CardBody = styled.div`
   background: white;
@@ -33,13 +40,10 @@ const CardBody = styled.div`
 `;
 const CardFooter = styled.div``;
 
-const Card = ({ title, children, subTitle }: Props) => {
+const Card = ({ title, children }) => {
   return (
     <StyledCard>
-      <CardHeader>
-        <Title>{title}</Title>
-        <SubTitle>{subTitle}</SubTitle>
-      </CardHeader>
+      {/* <CardHeader>{title}</CardHeader> */}
       <CardBody>{children}</CardBody>
       <CardFooter></CardFooter>
     </StyledCard>

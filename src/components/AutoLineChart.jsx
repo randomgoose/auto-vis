@@ -13,6 +13,7 @@ import {
 import Handle from "./Handle";
 import ResizableContainer from "./ResizableContainer";
 import useGeneralRules from "../hooks/useGeneralRules";
+import usePalette from "../hooks/usePalette";
 
 export default function AutoLineChart(props) {
   const ref = React.useRef();
@@ -21,8 +22,27 @@ export default function AutoLineChart(props) {
   const legendRef = React.useRef();
   const [width, setWidth] = React.useState(200);
   const [height, setHeight] = React.useState(200);
-  const [aspectRatio, setAspectRatio] = React.useState(0);
+  const [aspectRatio, setAspectRatio] = React.useState(1);
   const [barWidth, setBarWidth] = React.useState(0);
+
+  const palette = usePalette();
+
+  function renderLegend() {
+    return height > 120 ? (
+      <Legend layout="horizontal" wrapperStyle={{ marginTop: 24 }} />
+    ) : height < 80 ? null : (
+      <Legend
+        layout="vertical"
+        align="right"
+        verticalAlign="middle"
+        wrapperStyle={{ fontSize: 14, paddingLeft: 32 }}
+      />
+    );
+  }
+
+  function shouldRenderVerticalChart() {
+    return aspectRatio < .25 ? true : false
+  }
 
   function renderCartesianGrid() {
     if (width > 160 && height > 120) {
@@ -38,6 +58,9 @@ export default function AutoLineChart(props) {
     }
   }
 
+  const dataKeys = ['burger', 'kebab']
+  const lines = dataKeys.map((i, k) => <Line dataKey={i} key={k} stroke={palette[k + 3]} type="monotone"></ Line>)
+
   return (
     <ResizableContainer
       ref={ref}
@@ -49,14 +72,13 @@ export default function AutoLineChart(props) {
       }}
     >
       <ResponsiveContainer>
-        <LineChart ref={chartRef} data={props.data}>
+        <LineChart ref={chartRef} data={props.data} layout={shouldRenderVerticalChart() ? 'vertical' : 'horizontal'}>
+          <XAxis dataKey={shouldRenderVerticalChart() ? null : 'country'} type={shouldRenderVerticalChart() ? 'number' : 'category'} />
+          <YAxis dateKey={shouldRenderVerticalChart() ? 'country' : null} width={40} type={shouldRenderVerticalChart() ? 'category' : 'number'} />
+          {lines}
           {useGeneralRules(width, height)}
-          <XAxis dataKey="country" hide={shouldHideAxis()} />
-          <YAxis stroke="#8884d8" width={40} hide={shouldHideAxis()} />
-          <Line dataKey="burger" stroke="#8884d8" type="monotone" />
-          <Line dataKey="fries" stroke="#82ca9d" type="monotone" />
-          <Tooltip />
-          <Legend />
+          {renderLegend()}
+          < Tooltip />
         </LineChart>
       </ResponsiveContainer>
     </ResizableContainer>
